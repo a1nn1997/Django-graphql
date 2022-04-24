@@ -19,6 +19,7 @@
 # schema = graphene.Schema(query=Query)
 
 
+from importlib.metadata import requires
 from unicodedata import category
 import graphene
 from graphene_django import DjangoObjectType
@@ -64,18 +65,50 @@ class Query(graphene.ObjectType):
     def resolve_all_answers(root, info, id):
        return Answer.objects.filter(question=id)
 
+# post request to send data like rest apis
+# class CategoryMutation(graphene.Mutation):
 
+#     class Arguments:
+#         name= graphene.String(required=True)
+
+#     category = graphene.Field(CategoryType)
+
+#     @classmethod
+#     def mutate(cls,root, info,name):
+#         category=Category(name=name)
+#         category.save()
+#         return CategoryMutation(category=category)
+
+# post request to update data like rest apis
 class CategoryMutation(graphene.Mutation):
 
     class Arguments:
-        name= graphene.String(required=True)
-
-    category = graphene.Field(CategoryType)
-
+        id= graphene.ID()
+        name = graphene.String(required=True)
+    
+    category =graphene.Field(CategoryType)
+    
     @classmethod
-    def mutate(root, info,name):
-        category=Category(name=name)
-        category.save()
+    def mutate(cls,root, info,name,id):
+       category=Category.objects.get(id=id)
+       category.name=name
+       category.save()
+       return CategoryMutation(category=category)    
+
+
+# post request to delete data like rest apis
+class CategoryMutation(graphene.Mutation):
+
+    class Arguments:
+        id= graphene.ID()
+    
+    category =graphene.Field(CategoryType)
+    
+    @classmethod
+    def mutate(cls,root, info,id):
+       category=Category.objects.get(id=id)
+       category.delete()
+       return     
 
 
 class Mutations(graphene.ObjectType):

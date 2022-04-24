@@ -33,3 +33,33 @@ query GetQuestion($id: Int = 1){
   }
 }
 
+## 3
+## update
+mutation firstmutation{
+  newCategory(id:3, name: "poglitest"){
+    category{
+      name
+    }
+  }
+}
+
+## 4
+## add
+mutation firstmutation{
+  newCategory(name: "poglitest"){
+    category{
+      name
+    }
+  }
+}
+
+## 5
+## delete
+mutation firstmutation{
+  newCategory(id:3){
+    category{
+      name
+    }
+  }
+}
+
