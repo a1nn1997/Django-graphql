@@ -19,6 +19,7 @@
 # schema = graphene.Schema(query=Query)
 
 
+from unicodedata import category
 import graphene
 from graphene_django import DjangoObjectType
 from graphene_django import DjangoListField
@@ -63,5 +64,22 @@ class Query(graphene.ObjectType):
     def resolve_all_answers(root, info, id):
        return Answer.objects.filter(question=id)
 
-schema = graphene.Schema(query=Query)
+
+class CategoryMutation(graphene.Mutation):
+
+    class Arguments:
+        name= graphene.String(required=True)
+
+    category = graphene.Field(CategoryType)
+
+    @classmethod
+    def mutate(root, info,name):
+        category=Category(name=name)
+        category.save()
+
+
+class Mutations(graphene.ObjectType):
+    new_category = CategoryMutation.Field()
+
+schema = graphene.Schema(query=Query , mutation= Mutations)
 
