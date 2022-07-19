@@ -16,6 +16,7 @@ query{
 }
 
 
+
 ## 2
 
 query GetQuestion($id: Int = 1){
